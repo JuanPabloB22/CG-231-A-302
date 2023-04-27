@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Perspective View Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/build/three.min.js"></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <script>
+      // Crear la escena
+      const scene = new THREE.Scene();
+      
+      // Crear una cámara perspectiva
+      const camera = new THREE.PerspectiveCamera(
+        75, // campo de visión
+        window.innerWidth / window.innerHeight, // relación de aspecto
+        0.1, // plano cercano
+        1000 // plano lejano
+      );
+      
+      // Crear el renderizador
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.getElementById("canvas-container").appendChild(renderer.domElement);
+      
+      // Crear un cubo
+      const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      scene.add(cube);
+      
+      // Posicionar la cámara y apuntarla al cubo
+      camera.position.set(0, 0, 5);
+      camera.lookAt(cube.position);
+      
+      // Renderizar la escena
+      renderer.render(scene, camera);
+    </script>
+  </body>
+</html>
