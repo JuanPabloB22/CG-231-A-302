@@ -1,43 +1,91 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Orthographic View Example</title>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/build/three.min.js"></script>
-  </head>
-  <body>
-    <div id="canvas-container"></div>
+    <head>
+        <title>Ortogonal</title>
+        <style>
+            html, body { margin: 0; padding: 0; overflow: hidden; }
+            #text {
+                position: absolute;
+                padding: 10px;
+                width: 100%;
+                text-align: center;
+                color: #FFFFFF;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="text">Ortogonal<br/>
+            
+        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r94/three.min.js"></script>
     <script>
-      // Crear la escena
-      const scene = new THREE.Scene();
-      
-      // Crear una cámara ortográfica
-      const camera = new THREE.OrthographicCamera(
-        window.innerWidth / -2, // left
-        window.innerWidth / 2, // right
-        window.innerHeight / 2, // top
-        window.innerHeight / -2, // bottom
-        1, // near
-        1000 // far
-      );
-      
-      // Crear el renderizador
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.getElementById("canvas-container").appendChild(renderer.domElement);
-      
-      // Crear un cubo
-      const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-      const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      scene.add(cube);
-      
-      // Posicionar la cámara y apuntarla al cubo
-      camera.position.set(0, 0, 5);
-      camera.lookAt(cube.position);
-      
-      // Renderizar la escena
-      renderer.render(scene, camera);
+    
+        var lado = 60;
+        function cubo(posini,lado,color,textura ){
+            var vertices = [   
+
+            new THREE.Vector3(lado , lado , lado ),
+            new THREE.Vector3(lado,0, lado),
+            new THREE.Vector3(lado,0, 0),
+            new THREE.Vector3(lado,lado, 0),
+            new THREE.Vector3(lado , lado , lado ),
+            new THREE.Vector3(0 , lado , lado ),
+            new THREE.Vector3(0 , 0, lado ),
+            new THREE.Vector3(lado , 0, lado ),//Hasta aca dos caras laterales
+
+
+            new THREE.Vector3(lado , 0, 0),
+            new THREE.Vector3(0 , 0, 0),            
+            new THREE.Vector3(0 , 0, lado ), //Vertices laterales arriba esquina origen
+
+            new THREE.Vector3(0 , lado, lado ),
+            new THREE.Vector3(0,lado ,0 ),
+            new THREE.Vector3(lado, lado,0 ),//Vertices laterales abajo esquina origen
+
+            
+            new THREE.Vector3(0 , 0, 0 ),
+            new THREE.Vector3(0 , lado, 0 )  //Union esquina origen abajo con la de arriba         
+
+            ];
+
+
+            var geometry = new THREE.Geometry();
+            geometry.vertices = vertices;
+            geometry.computeVertexNormals();
+            var material = new THREE.LineBasicMaterial({ color: color });
+            var cube = new THREE.Line(geometry, material);
+            cube.position.set(posini[0], posini[1], posini[2]);
+            return cube;
+        }
+
+        scene = new THREE.Scene();
+        camera = new THREE.OrthographicCamera( 13 / - 2, 11/ 2, 5/ 2, 10 / - 2, 20, 800 );    
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 1.0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        
+
+        //Cámara
+        camera.position.x = 150; 
+        camera.position.y = 200;
+        camera.position.z = 400;
+        camera.lookAt(scene.position);
+        document.body.appendChild(renderer.domElement);
+
+
+        var color = 0xff0000;
+        var material = new THREE.LineBasicMaterial({ color: color });
+        var cubito = cubo([0,0,0],lado,0xff0000,material);
+       
+
+        // Agregar las ayudas y cubos al escenario 
+       
+        scene.add(cubito);
+        
+        renderer.render(scene,camera)
+
     </script>
   </body>
+
 </html>
