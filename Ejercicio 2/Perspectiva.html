@@ -1,37 +1,91 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>PerspectiveCamera</title>
-		<style>
-			body { margin: 0; }
-		</style>
-	</head>
-	<body>
-		<script src="https://threejs.org/build/three.js"></script>
-		<script>
-			const scene = new THREE.Scene();
-			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    <head>
+        <title>PerspectiveCamera</title>
+        <style>
+            html, body { margin: 0; padding: 0; overflow: hidden; }
+            #text {
+                position: absolute;
+                padding: 10px;
+                width: 100%;
+                text-align: center;
+                color: #FFFFFF;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="text">Perspectiva<br/>
+            
+        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r94/three.min.js"></script>
+    <script>
+    
+        var lado = 60;
+        function cubo(posini,lado,color,textura ){
+            var vertices = [   
 
-       //vertices=[[0,0,0],[lado,0,0],[lado,0,lado],[0,0,lado],[lado/2,h,lado/2]];
+            new THREE.Vector3(lado , lado , lado ),
+            new THREE.Vector3(lado,0, lado),
+            new THREE.Vector3(lado,0, 0),
+            new THREE.Vector3(lado,lado, 0),
+            new THREE.Vector3(lado , lado , lado ),
+            new THREE.Vector3(0 , lado , lado ),
+            new THREE.Vector3(0 , 0, lado ),
+            new THREE.Vector3(lado , 0, lado ),//Hasta aca dos caras laterales
 
-			const renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			document.body.appendChild( renderer.domElement );
 
-			const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			const cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
+            new THREE.Vector3(lado , 0, 0),
+            new THREE.Vector3(0 , 0, 0),            
+            new THREE.Vector3(0 , 0, lado ), //Vertices laterales arriba esquina origen
 
-			camera.position.z = 5;
+            new THREE.Vector3(0 , lado, lado ),
+            new THREE.Vector3(0,lado ,0 ),
+            new THREE.Vector3(lado, lado,0 ),//Vertices laterales abajo esquina origen
 
-			
+            
+            new THREE.Vector3(0 , 0, 0 ),
+            new THREE.Vector3(0 , lado, 0 )  //Union esquina origen abajo con la de arriba         
 
-		  renderer.render( scene, camera );
-			
+            ];
 
-			
-		</script>
-	</body>
+
+            var geometry = new THREE.Geometry();
+            geometry.vertices = vertices;
+            geometry.computeVertexNormals();
+            var material = new THREE.LineBasicMaterial({ color: color });
+            var cube = new THREE.Line(geometry, material);
+            cube.position.set(posini[0], posini[1], posini[2]);
+            return cube;
+        }
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);    
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 1.0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        
+
+        //Cámara
+        camera.position.x = 150; 
+        camera.position.y = 200;
+        camera.position.z = 400;
+        camera.lookAt(scene.position);
+        document.body.appendChild(renderer.domElement);
+
+
+        var color = 0xff0000;
+        var material = new THREE.LineBasicMaterial({ color: color });
+        var cubito = cubo([0,0,0],lado,0xff0000,material);
+       
+
+        // Agregar las ayudas y cubos al escenario 
+       
+        scene.add(cubito);
+        
+        renderer.render(scene,camera)
+
+    </script>
+  </body>
+
 </html>
